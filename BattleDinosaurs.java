@@ -25,8 +25,6 @@ public class BattleDinosaurs {
 
   public void startPhase() {
     // Game Status初期化
-    this.playerSpecialEffect = "";
-    this.cpuSpecialEffect = "";
     if (this.drawnNum >= 15) {
       System.out.println("Deckがなくなった");
       this.drawnNum = 0;
@@ -115,17 +113,18 @@ public class BattleDinosaurs {
     // offence=10*Attack*agility1/agility2
     // guard=10*Def
     // agilityが0のときの処理
-    if (this.cpuAgilityPoint == 0) {
-      if (this.playerAgilityPoint == 0) {
-        this.playerOffencePoint = 10 * this.playerAttackPoint;
-      } else {
-        this.playerOffencePoint = 10 * this.playerAttackPoint * this.playerAgilityPoint;
-      }
-    } else if (this.playerAgilityPoint == 0) {
-      this.cpuOffencePoint = 10 * this.cpuAttackPoint * this.cpuAgilityPoint;
-    } else {
+    if (this.cpuAgilityPoint != 0 && this.playerAgilityPoint != 0) {
       this.playerOffencePoint = 10 * this.playerAttackPoint * this.playerAgilityPoint / this.cpuAgilityPoint;
       this.cpuOffencePoint = 10 * this.cpuAttackPoint * this.cpuAgilityPoint / this.playerAgilityPoint;
+    } else if (this.cpuAgilityPoint == 0 && this.playerAgilityPoint == 0) {
+      this.playerOffencePoint = 10 * this.playerAttackPoint;
+      this.cpuOffencePoint = 10 * this.cpuAttackPoint;// agilityが0のときは倍率が1倍になる
+    } else if (this.cpuAgilityPoint == 0) {
+      this.playerOffencePoint = 10 * this.playerAttackPoint * this.playerAgilityPoint;
+      this.cpuOffencePoint = 10 * this.cpuAttackPoint;// agilityが0のときは倍率が1倍になる
+    } else if (this.playerAgilityPoint == 0) {
+      this.playerOffencePoint = 10 * this.playerAttackPoint;
+      this.cpuOffencePoint = 10 * this.cpuAttackPoint * this.cpuAgilityPoint;
     }
     this.playerGuardPoint = 10 * this.playerDefencePoint;
     this.cpuGuardPoint = 10 * this.cpuDefencePoint;
@@ -134,6 +133,9 @@ public class BattleDinosaurs {
     if (this.playerAgilityPoint >= this.cpuAgilityPoint) {
       System.out.println("Playerの攻撃！");
       // カード特殊効果の処理
+      this.playerSpecialEffect = "";// 初期化
+      this.cpuSpecialEffect = "";
+
       if (this.playerAttackPoint >= 3) {
         System.out.println("PlayerのAttack Card3枚による貫通攻撃!");
         this.playerSpecialEffect = "piercing";
@@ -176,6 +178,9 @@ public class BattleDinosaurs {
       }
       if (this.cpuHp > 0) {
         System.out.println("CPUの攻撃！");
+        // カード特殊効果の処理
+        this.playerSpecialEffect = "";// 初期化
+        this.cpuSpecialEffect = "";
         if (this.cpuAttackPoint >= 3) {
           System.out.println("CPUのAttack Card3枚による貫通攻撃!");
           this.cpuSpecialEffect = "piercing";
@@ -200,7 +205,7 @@ public class BattleDinosaurs {
             } else {
               System.out.println("Playerはダメージを受けなかった");
             }
-          } else if (this.playerSpecialEffect.contains("counter")) {// CPUがcounterモードの場合，cpuOffencePoint分のダメージをcpuHP(php)が受ける
+          } else if (this.playerSpecialEffect.contains("counter")) {// counterモードの場合，OffencePoint分のダメージを攻撃側が受ける
             System.out.println("Playerのカウンター！");
             System.out.println("CPUは" + this.cpuOffencePoint + "ポイントのダメージ！");
             this.cpuHp = this.cpuHp - this.cpuOffencePoint;
@@ -220,18 +225,18 @@ public class BattleDinosaurs {
     } else {
       System.out.println("CPUの攻撃！");
       if (this.cpuAttackPoint >= 3) {
-        System.out.println("Attack Card3枚による貫通攻撃!");
+        System.out.println("CPUのAttack Card3枚による貫通攻撃!");
         this.cpuSpecialEffect = "piercing";
       } else if (this.cpuAttackPoint >= 2) {
-        System.out.println("Attack Card2枚による攻撃力倍加！");
+        System.out.println("CPUのAttack Card2枚による攻撃力倍加！");
         this.cpuOffencePoint = this.cpuOffencePoint * 2;
       }
 
       if (this.playerDefencePoint >= 3) {
-        System.out.println("Defence Card3枚によるカウンター！");
+        System.out.println("PlayerのDefence Card3枚によるカウンター！");
         this.playerSpecialEffect = "counter";
       } else if (this.playerDefencePoint >= 2) {
-        System.out.println("Defence Card2枚による防御力倍加！");
+        System.out.println("PlayerのDefence Card2枚による防御力倍加！");
         this.playerGuardPoint = this.playerGuardPoint * 2;
       }
       if (this.cpuSpecialEffect.isEmpty() == true) {// specialEffectがない場合，cpuOffencepointからplayerGuardPointを引いたものをplayerHpから引く
@@ -306,6 +311,7 @@ public class BattleDinosaurs {
     }
     System.out.println("PlayerのHPは" + this.playerHp + "ポイント");
     System.out.println("CPUのHPは" + this.cpuHp + "ポイント");
+    System.out.println("------------Phase End--------------------------");
   }
 
   // PlayerとCPUのDeck(15枚)を作るメソッド
@@ -414,5 +420,221 @@ public class BattleDinosaurs {
     this.agilityCard[4] = 1;
     this.defenceCard[4] = 2;
 
+  }
+
+  public String[] getDinoName() {
+    return dinoName;
+  }
+
+  public void setDinoName(String[] dinoName) {
+    this.dinoName = dinoName;
+  }
+
+  public int[] getAttackCard() {
+    return attackCard;
+  }
+
+  public void setAttackCard(int[] attackCard) {
+    this.attackCard = attackCard;
+  }
+
+  public int[] getAgilityCard() {
+    return agilityCard;
+  }
+
+  public void setAgilityCard(int[] agilityCard) {
+    this.agilityCard = agilityCard;
+  }
+
+  public int[] getDefenceCard() {
+    return defenceCard;
+  }
+
+  public void setDefenceCard(int[] defenceCard) {
+    this.defenceCard = defenceCard;
+  }
+
+  public String[] getPlayerDeck() {
+    return playerDeck;
+  }
+
+  public void setPlayerDeck(String[] playerDeck) {
+    this.playerDeck = playerDeck;
+  }
+
+  public int[] getDrawnPlayerDeck() {
+    return drawnPlayerDeck;
+  }
+
+  public void setDrawnPlayerDeck(int[] drawnPlayerDeck) {
+    this.drawnPlayerDeck = drawnPlayerDeck;
+  }
+
+  public String[] getCpuDeck() {
+    return cpuDeck;
+  }
+
+  public void setCpuDeck(String[] cpuDeck) {
+    this.cpuDeck = cpuDeck;
+  }
+
+  public int[] getDrawnCpuDeck() {
+    return drawnCpuDeck;
+  }
+
+  public void setDrawnCpuDeck(int[] drawnCpuDeck) {
+    this.drawnCpuDeck = drawnCpuDeck;
+  }
+
+  public int[] getPlayerCards() {
+    return playerCards;
+  }
+
+  public void setPlayerCards(int[] playerCards) {
+    this.playerCards = playerCards;
+  }
+
+  public int[] getCpuCards() {
+    return cpuCards;
+  }
+
+  public void setCpuCards(int[] cpuCards) {
+    this.cpuCards = cpuCards;
+  }
+
+  public int getPlayerAttackPoint() {
+    return playerAttackPoint;
+  }
+
+  public void setPlayerAttackPoint(int playerAttackPoint) {
+    this.playerAttackPoint = playerAttackPoint;
+  }
+
+  public int getPlayerAgilityPoint() {
+    return playerAgilityPoint;
+  }
+
+  public void setPlayerAgilityPoint(int playerAgilityPoint) {
+    this.playerAgilityPoint = playerAgilityPoint;
+  }
+
+  public int getPlayerDefencePoint() {
+    return playerDefencePoint;
+  }
+
+  public void setPlayerDefencePoint(int playerDefencePoint) {
+    this.playerDefencePoint = playerDefencePoint;
+  }
+
+  public int getPlayerOffencePoint() {
+    return playerOffencePoint;
+  }
+
+  public void setPlayerOffencePoint(int playerOffencePoint) {
+    this.playerOffencePoint = playerOffencePoint;
+  }
+
+  public int getPlayerGuardPoint() {
+    return playerGuardPoint;
+  }
+
+  public void setPlayerGuardPoint(int playerGuardPoint) {
+    this.playerGuardPoint = playerGuardPoint;
+  }
+
+  public int getCpuAttackPoint() {
+    return cpuAttackPoint;
+  }
+
+  public void setCpuAttackPoint(int cpuAttackPoint) {
+    this.cpuAttackPoint = cpuAttackPoint;
+  }
+
+  public int getCpuAgilityPoint() {
+    return cpuAgilityPoint;
+  }
+
+  public void setCpuAgilityPoint(int cpuAgilityPoint) {
+    this.cpuAgilityPoint = cpuAgilityPoint;
+  }
+
+  public int getCpuDefencePoint() {
+    return cpuDefencePoint;
+  }
+
+  public void setCpuDefencePoint(int cpuDefencePoint) {
+    this.cpuDefencePoint = cpuDefencePoint;
+  }
+
+  public int getCpuOffencePoint() {
+    return cpuOffencePoint;
+  }
+
+  public void setCpuOffencePoint(int cpuOffencePoint) {
+    this.cpuOffencePoint = cpuOffencePoint;
+  }
+
+  public int getCpuGuardPoint() {
+    return cpuGuardPoint;
+  }
+
+  public void setCpuGuardPoint(int cpuGuardPoint) {
+    this.cpuGuardPoint = cpuGuardPoint;
+  }
+
+  public int getPlayerHp() {
+    return playerHp;
+  }
+
+  public void setPlayerHp(int playerHp) {
+    this.playerHp = playerHp;
+  }
+
+  public int getCpuHp() {
+    return cpuHp;
+  }
+
+  public void setCpuHp(int cpuHp) {
+    this.cpuHp = cpuHp;
+  }
+
+  public String getPlayerSpecialEffect() {
+    return playerSpecialEffect;
+  }
+
+  public void setPlayerSpecialEffect(String playerSpecialEffect) {
+    this.playerSpecialEffect = playerSpecialEffect;
+  }
+
+  public String getCpuSpecialEffect() {
+    return cpuSpecialEffect;
+  }
+
+  public void setCpuSpecialEffect(String cpuSpecialEffect) {
+    this.cpuSpecialEffect = cpuSpecialEffect;
+  }
+
+  public int getDrawnNum() {
+    return drawnNum;
+  }
+
+  public void setDrawnNum(int drawnNum) {
+    this.drawnNum = drawnNum;
+  }
+
+  public Random getRnd() {
+    return rnd;
+  }
+
+  public void setRnd(Random rnd) {
+    this.rnd = rnd;
+  }
+
+  public Scanner getSc() {
+    return sc;
+  }
+
+  public void setSc(Scanner sc) {
+    this.sc = sc;
   }
 }

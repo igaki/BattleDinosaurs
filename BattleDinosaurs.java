@@ -18,22 +18,36 @@ public class BattleDinosaurs {
   int cpuHp = 100;
   String playerSpecialEffect = "";
   String cpuSpecialEffect = "";
+  int drawnNum = 0;
 
   Random rnd = new Random();
   Scanner sc = new Scanner(System.in);
 
   public void startPhase() {
     // Game Status初期化
-    System.out.println("Playerの恐竜カード----------(Hit Enter!)");
+    this.playerSpecialEffect = "";
+    this.cpuSpecialEffect = "";
+    if (this.drawnNum >= 15) {
+      System.out.println("Deckがなくなった");
+      this.drawnNum = 0;
+      for (int i = 0; i < this.drawnPlayerDeck.length; i++) {
+        this.drawnPlayerDeck[i] = 0;
+        this.drawnCpuDeck[i] = 0;
+      }
+      this.createDeck();
+    }
+
+    System.out.println("Playerの恐竜カードDraw----------(Hit Enter!)");
     sc.nextLine();
-    // playerCards[0]~[2]に0~14の数字から5つの異なる数字をランダムに選んで格納する
-    // 同時にplayerDeckの対応する数字の配列に"Done"と格納する
+    // playerCards[0]~[4]に0~14の数字から5つの異なる数字をランダムに選んで格納する
+    // 同時にdrawnPlayerDeckの対応する数字の配列に-1と格納する
     for (int i = 0; i < playerCards.length; i++) {
       int playerCard = rnd.nextInt(this.playerDeck.length);
       if (this.drawnPlayerDeck[playerCard] == -1) {
         i--;
         continue;
       } else {
+        this.drawnNum++;// Drawした枚数をカウントアップ
         this.playerCards[i] = playerCard;
         this.drawnPlayerDeck[playerCard] = -1;
       }
@@ -60,7 +74,7 @@ public class BattleDinosaurs {
     System.out.println("Agility Card:" + this.playerAgilityPoint);
     System.out.println("Defence Card:" + this.playerDefencePoint);
 
-    System.out.println("CPUの恐竜カード----------(Hit Enter!)");
+    System.out.println("CPUの恐竜カードDraw----------(Hit Enter!)");
     sc.nextLine();
     for (int i = 0; i < cpuCards.length; i++) {
       int cpuCard = rnd.nextInt(this.cpuDeck.length);
@@ -100,6 +114,7 @@ public class BattleDinosaurs {
     // Offence Point/Guard Pointの計算
     // offence=10*Attack*agility1/agility2
     // guard=10*Def
+    // agilityが0のときの処理
     if (this.cpuAgilityPoint == 0) {
       if (this.playerAgilityPoint == 0) {
         this.playerOffencePoint = 10 * this.playerAttackPoint;
@@ -294,7 +309,7 @@ public class BattleDinosaurs {
   }
 
   // PlayerとCPUのDeck(15枚)を作るメソッド
-  public void createPlayerDeck() {
+  public void createDeck() {
     int pcNum = 0;
     int dino1 = rnd.nextInt(this.dinoName.length);
     for (int i = 0; i < attackCard[dino1]; i++, pcNum++) {

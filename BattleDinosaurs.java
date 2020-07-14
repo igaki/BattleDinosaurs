@@ -271,6 +271,8 @@ public class BattleDinosaurs {
       if (this.php > 0) {
         System.out.println("Playerの攻撃！");
         // カード特殊効果の処理
+        this.ps = "";// 初期化
+        this.cs = "";
         if (this.playerAttackPoint >= 3) {
           System.out.println("PlayerのAttack Card3枚による貫通攻撃!");
           this.ps = "piercing";

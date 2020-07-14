@@ -2,22 +2,22 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class BattleDinosaurs {
-  String[] dinoName = new String[5];
-  int[] attackCard = new int[5];
-  int[] agilityCard = new int[5];
-  int[] defenceCard = new int[5];
-  String[] playerDeck = new String[15];
+  String[] dn = new String[5];
+  int[] atc = new int[5];
+  int[] agc = new int[5];
+  int[] dc = new int[5];
+  String[] pd = new String[15];
   int[] drawnPlayerDeck = new int[15];
-  String[] cpuDeck = new String[15];
+  String[] cd = new String[15];
   int[] drawnCpuDeck = new int[15];
-  int[] playerCards = new int[5];
-  int[] cpuCards = new int[5];
+  int[] pcs = new int[5];
+  int[] ccs = new int[5];
   int playerAttackPoint, playerAgilityPoint, playerDefencePoint, playerOffencePoint, playerGuardPoint;
   int cpuAttackPoint, cpuAgilityPoint, cpuDefencePoint, cpuOffencePoint, cpuGuardPoint;
-  int playerHp = 100;
-  int cpuHp = 100;
-  String playerSpecialEffect = "";
-  String cpuSpecialEffect = "";
+  int php = 100;
+  int chp = 100;
+  String ps = "";
+  String cs = "";
   int drawnNum = 0;
 
   Random rnd = new Random();
@@ -39,19 +39,19 @@ public class BattleDinosaurs {
     sc.nextLine();
     // playerCards[0]~[4]に0~14の数字から5つの異なる数字をランダムに選んで格納する
     // 同時にdrawnPlayerDeckの対応する数字の配列に-1と格納する
-    for (int i = 0; i < playerCards.length; i++) {
-      int playerCard = rnd.nextInt(this.playerDeck.length);
+    for (int i = 0; i < pcs.length; i++) {
+      int playerCard = rnd.nextInt(this.pd.length);
       if (this.drawnPlayerDeck[playerCard] == -1) {
         i--;
         continue;
       } else {
         this.drawnNum++;// Drawした枚数をカウントアップ
-        this.playerCards[i] = playerCard;
+        this.pcs[i] = playerCard;
         this.drawnPlayerDeck[playerCard] = -1;
       }
     }
-    for (int card : this.playerCards) {
-      System.out.println(this.playerDeck[card]);
+    for (int card : this.pcs) {
+      System.out.println(this.pd[card]);
     }
 
     // カードの枚数がそれぞれAttack，Agility，Defenceのポイントになる
@@ -59,12 +59,12 @@ public class BattleDinosaurs {
     this.playerAttackPoint = 0;
     this.playerAgilityPoint = 0;
     this.playerDefencePoint = 0;
-    for (int i = 0; i < this.playerCards.length; i++) {
-      if (this.playerDeck[this.playerCards[i]].contains("Attack")) {
+    for (int i = 0; i < this.pcs.length; i++) {
+      if (this.pd[this.pcs[i]].contains("Attack")) {
         this.playerAttackPoint++;
-      } else if (this.playerDeck[this.playerCards[i]].contains("Agility")) {
+      } else if (this.pd[this.pcs[i]].contains("Agility")) {
         this.playerAgilityPoint++;
-      } else if (this.playerDeck[this.playerCards[i]].contains("Defence")) {
+      } else if (this.pd[this.pcs[i]].contains("Defence")) {
         this.playerDefencePoint++;
       }
     }
@@ -74,19 +74,19 @@ public class BattleDinosaurs {
 
     System.out.println("CPUの恐竜カードDraw----------(Hit Enter!)");
     sc.nextLine();
-    for (int i = 0; i < cpuCards.length; i++) {
-      int cpuCard = rnd.nextInt(this.cpuDeck.length);
+    for (int i = 0; i < ccs.length; i++) {
+      int cpuCard = rnd.nextInt(this.cd.length);
       if (this.drawnCpuDeck[cpuCard] == -1) {
         i--;
         continue;
       } else {
-        this.cpuCards[i] = cpuCard;
+        this.ccs[i] = cpuCard;
         this.drawnCpuDeck[cpuCard] = -1;
       }
     }
 
-    for (int card : this.cpuCards) {
-      System.out.println(this.cpuDeck[card]);
+    for (int card : this.ccs) {
+      System.out.println(this.cd[card]);
     }
 
     // カードの枚数がそれぞれAttack，Agility，Defenceのポイントになる
@@ -94,12 +94,12 @@ public class BattleDinosaurs {
     this.cpuAttackPoint = 0;
     this.cpuAgilityPoint = 0;
     this.cpuDefencePoint = 0;
-    for (int i = 0; i < this.cpuCards.length; i++) {
-      if (this.cpuDeck[this.cpuCards[i]].contains("Attack")) {
+    for (int i = 0; i < this.ccs.length; i++) {
+      if (this.cd[this.ccs[i]].contains("Attack")) {
         this.cpuAttackPoint++;
-      } else if (this.cpuDeck[this.cpuCards[i]].contains("Agility")) {
+      } else if (this.cd[this.ccs[i]].contains("Agility")) {
         this.cpuAgilityPoint++;
-      } else if (this.cpuDeck[this.cpuCards[i]].contains("Defence")) {
+      } else if (this.cd[this.ccs[i]].contains("Defence")) {
         this.cpuDefencePoint++;
       }
     }
@@ -133,57 +133,57 @@ public class BattleDinosaurs {
     if (this.playerAgilityPoint >= this.cpuAgilityPoint) {
       System.out.println("Playerの攻撃！");
       // カード特殊効果の処理
-      this.playerSpecialEffect = "";// 初期化
-      this.cpuSpecialEffect = "";
+      this.ps = "";// 初期化
+      this.cs = "";
 
       if (this.playerAttackPoint >= 3) {
         System.out.println("PlayerのAttack Card3枚による貫通攻撃!");
-        this.playerSpecialEffect = "piercing";
+        this.ps = "piercing";
       } else if (this.playerAttackPoint >= 2) {
         System.out.println("PlayerのAttack Card2枚による攻撃力倍加！");
         this.playerOffencePoint = this.playerOffencePoint * 2;
       }
       if (this.cpuDefencePoint >= 3) {
         System.out.println("CPUのDefence Card3枚によるカウンター！");
-        this.cpuSpecialEffect = "counter";
+        this.cs = "counter";
       } else if (this.cpuDefencePoint >= 2) {
         System.out.println("CPUのDefence Card2枚による防御力倍加！");
         this.cpuGuardPoint = this.cpuGuardPoint * 2;
       }
       // CPUへのダメージ処理
-      if (this.playerSpecialEffect.isEmpty() == true) {// specialEffectがない場合，playerOffencepointからcpuGuardPointを引いたものをcpuHpから引く
-        if (this.cpuSpecialEffect.isEmpty() == true) {
+      if (this.ps.isEmpty() == true) {// specialEffectがない場合，playerOffencepointからcpuGuardPointを引いたものをcpuHpから引く
+        if (this.cs.isEmpty() == true) {
           int cpuDamage = this.playerOffencePoint - this.cpuGuardPoint;
           if (cpuDamage > 0) {
             System.out.println("CPUは" + cpuDamage + "ポイントのダメージ！");
-            this.cpuHp = this.cpuHp - cpuDamage;
+            this.chp = this.chp - cpuDamage;
           } else {
             System.out.println("CPUはダメージを受けなかった");
           }
-        } else if (this.cpuSpecialEffect.contains("counter")) {// CPUがcounterモードの場合，playerOffencePoint分のダメージをplayerHP(php)が受ける
+        } else if (this.cs.contains("counter")) {// CPUがcounterモードの場合，playerOffencePoint分のダメージをplayerHP(php)が受ける
           System.out.println("CPUのカウンター！");
           System.out.println("Playerは" + this.playerOffencePoint + "ポイントのダメージ！");
-          this.playerHp = this.playerHp - this.playerOffencePoint;
+          this.php = this.php - this.playerOffencePoint;
         }
-      } else if (this.playerSpecialEffect.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，cpuのGuardPointを無視してcpuHpにダメージを与える
+      } else if (this.ps.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，cpuのGuardPointを無視してcpuHpにダメージを与える
         System.out.println("Playerの防御無視攻撃！");
-        if (this.cpuSpecialEffect.contains("counter")) {
+        if (this.cs.contains("counter")) {
           System.out.println("CPUのカウンター！");
           System.out.println("Playerは" + this.playerOffencePoint + "ポイントのダメージ！");
-          this.playerHp = this.playerHp - this.playerOffencePoint;
+          this.php = this.php - this.playerOffencePoint;
         } else {
           System.out.println("CPUは" + this.playerOffencePoint + "ポイントのダメージ！");
-          this.cpuHp = this.cpuHp - this.playerOffencePoint;
+          this.chp = this.chp - this.playerOffencePoint;
         }
       }
-      if (this.cpuHp > 0) {
+      if (this.chp > 0) {
         System.out.println("CPUの攻撃！");
         // カード特殊効果の処理
-        this.playerSpecialEffect = "";// 初期化
-        this.cpuSpecialEffect = "";
+        this.ps = "";// 初期化
+        this.cs = "";
         if (this.cpuAttackPoint >= 3) {
           System.out.println("CPUのAttack Card3枚による貫通攻撃!");
-          this.cpuSpecialEffect = "piercing";
+          this.cs = "piercing";
         } else if (this.cpuAttackPoint >= 2) {
           System.out.println("CPUのAttack Card2枚による攻撃力倍加！");
           this.cpuOffencePoint = this.cpuOffencePoint * 2;
@@ -191,42 +191,46 @@ public class BattleDinosaurs {
 
         if (this.playerDefencePoint >= 3) {
           System.out.println("PlayerのDefence Card3枚によるカウンター！");
-          this.playerSpecialEffect = "counter";
+          this.ps = "counter";
         } else if (this.playerDefencePoint >= 2) {
           System.out.println("PlayerのDefence Card2枚による防御力倍加！");
           this.playerGuardPoint = this.playerGuardPoint * 2;
         }
-        if (this.cpuSpecialEffect.isEmpty() == true) {// specialEffectがない場合，cpuOffencepointからplayerGuardPointを引いたものをplayerHpから引く
-          if (this.playerSpecialEffect.isEmpty() == true) {
+        if (this.cs.isEmpty() == true) {// specialEffectがない場合，cpuOffencepointからplayerGuardPointを引いたものをplayerHpから引く
+          if (this.ps.isEmpty() == true) {
             int playerDamage = this.cpuOffencePoint - this.playerGuardPoint;
             if (playerDamage >= 0) {
               System.out.println("Playerは" + playerDamage + "ポイントのダメージ！");
-              this.playerHp = this.playerHp - playerDamage;
+              this.php = this.php - playerDamage;
             } else {
               System.out.println("Playerはダメージを受けなかった");
             }
-          } else if (this.playerSpecialEffect.contains("counter")) {// counterモードの場合，OffencePoint分のダメージを攻撃側が受ける
+          } else if (this.ps.contains("counter")) {// counterモードの場合，OffencePoint分のダメージを攻撃側が受ける
             System.out.println("Playerのカウンター！");
             System.out.println("CPUは" + this.cpuOffencePoint + "ポイントのダメージ！");
-            this.cpuHp = this.cpuHp - this.cpuOffencePoint;
+            this.chp = this.chp - this.cpuOffencePoint;
           }
-        } else if (this.cpuSpecialEffect.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，playerのGuardPointを無視してplayerHpにダメージを与える
+        } else if (this.cs.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，playerのGuardPointを無視してplayerHpにダメージを与える
           System.out.println("CPUの防御無視攻撃！");
-          if (this.playerSpecialEffect.contains("counter")) {
+          if (this.ps.contains("counter")) {
             System.out.println("Playerのカウンター！");
             System.out.println("CPUは" + this.cpuOffencePoint + "ポイントのダメージ！");
-            this.cpuHp = this.cpuHp - this.cpuOffencePoint;
+            this.chp = this.chp - this.cpuOffencePoint;
           } else {
             System.out.println("Playerは" + this.cpuOffencePoint + "ポイントのダメージ！");
-            this.playerHp = this.playerHp - this.cpuOffencePoint;
+            this.php = this.php - this.cpuOffencePoint;
           }
         }
       }
     } else {
       System.out.println("CPUの攻撃！");
+      // カード特殊効果の処理
+      this.ps = "";// 初期化
+      this.cs = "";
+
       if (this.cpuAttackPoint >= 3) {
         System.out.println("CPUのAttack Card3枚による貫通攻撃!");
-        this.cpuSpecialEffect = "piercing";
+        this.cs = "piercing";
       } else if (this.cpuAttackPoint >= 2) {
         System.out.println("CPUのAttack Card2枚による攻撃力倍加！");
         this.cpuOffencePoint = this.cpuOffencePoint * 2;
@@ -234,232 +238,232 @@ public class BattleDinosaurs {
 
       if (this.playerDefencePoint >= 3) {
         System.out.println("PlayerのDefence Card3枚によるカウンター！");
-        this.playerSpecialEffect = "counter";
+        this.ps = "counter";
       } else if (this.playerDefencePoint >= 2) {
         System.out.println("PlayerのDefence Card2枚による防御力倍加！");
         this.playerGuardPoint = this.playerGuardPoint * 2;
       }
-      if (this.cpuSpecialEffect.isEmpty() == true) {// specialEffectがない場合，cpuOffencepointからplayerGuardPointを引いたものをplayerHpから引く
-        if (this.playerSpecialEffect.isEmpty() == true) {
+      if (this.cs.isEmpty() == true) {// specialEffectがない場合，cpuOffencepointからplayerGuardPointを引いたものをplayerHpから引く
+        if (this.ps.isEmpty() == true) {
           int playerDamage = this.cpuOffencePoint - this.playerGuardPoint;
           if (playerDamage >= 0) {
             System.out.println("Playerは" + playerDamage + "ポイントのダメージ！");
-            this.playerHp = this.playerHp - playerDamage;
+            this.php = this.php - playerDamage;
           } else {
             System.out.println("Playerはダメージを受けなかった");
           }
-        } else if (this.playerSpecialEffect.contains("counter")) {// CPUがcounterモードの場合，cpuOffencePoint分のダメージをcpuHP(php)が受ける
+        } else if (this.ps.contains("counter")) {// CPUがcounterモードの場合，cpuOffencePoint分のダメージをcpuHP(php)が受ける
           System.out.println("Playerのカウンター！");
           System.out.println("CPUは" + this.cpuOffencePoint + "ポイントのダメージ！");
-          this.cpuHp = this.cpuHp - this.cpuOffencePoint;
+          this.chp = this.chp - this.cpuOffencePoint;
         }
-      } else if (this.cpuSpecialEffect.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，playerのGuardPointを無視してplayerHpにダメージを与える
+      } else if (this.cs.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，playerのGuardPointを無視してplayerHpにダメージを与える
         System.out.println("CPUの防御無視攻撃！");
-        if (this.playerSpecialEffect.contains("counter")) {
+        if (this.ps.contains("counter")) {
           System.out.println("Playerのカウンター！");
           System.out.println("CPUは" + this.cpuOffencePoint + "ポイントのダメージ！");
-          this.cpuHp = this.cpuHp - this.cpuOffencePoint;
+          this.chp = this.chp - this.cpuOffencePoint;
         } else {
           System.out.println("Playerは" + this.cpuOffencePoint + "ポイントのダメージ！");
-          this.playerHp = this.playerHp - this.cpuOffencePoint;
+          this.php = this.php - this.cpuOffencePoint;
         }
       }
-      if (this.playerHp > 0) {
+      if (this.php > 0) {
         System.out.println("Playerの攻撃！");
         // カード特殊効果の処理
         if (this.playerAttackPoint >= 3) {
           System.out.println("PlayerのAttack Card3枚による貫通攻撃!");
-          this.playerSpecialEffect = "piercing";
+          this.ps = "piercing";
         } else if (this.playerAttackPoint >= 2) {
           System.out.println("PlayerのAttack Card2枚による攻撃力倍加！");
           this.playerOffencePoint = this.playerOffencePoint * 2;
         }
         if (this.cpuDefencePoint >= 3) {
           System.out.println("CPUのDefence Card3枚によるカウンター！");
-          this.cpuSpecialEffect = "counter";
+          this.cs = "counter";
         } else if (this.cpuDefencePoint >= 2) {
           System.out.println("CPUのDefence Card2枚による防御力倍加！");
           this.cpuGuardPoint = this.cpuGuardPoint * 2;
         }
         // CPUへのダメージ処理
-        if (this.playerSpecialEffect.isEmpty() == true) {// specialEffectがない場合，playerOffencepointからcpuGuardPointを引いたものをcpuHpから引く
-          if (this.cpuSpecialEffect.isEmpty() == true) {
+        if (this.ps.isEmpty() == true) {// specialEffectがない場合，playerOffencepointからcpuGuardPointを引いたものをcpuHpから引く
+          if (this.cs.isEmpty() == true) {
             int cpuDamage = this.playerOffencePoint - this.cpuGuardPoint;
             if (cpuDamage > 0) {
               System.out.println("CPUは" + cpuDamage + "ポイントのダメージ！");
-              this.cpuHp = this.cpuHp - cpuDamage;
+              this.chp = this.chp - cpuDamage;
             } else {
               System.out.println("CPUはダメージを受けなかった");
             }
-          } else if (this.cpuSpecialEffect.contains("counter")) {// CPUがcounterモードの場合，playerOffencePoint分のダメージをplayerHP(php)が受ける
+          } else if (this.cs.contains("counter")) {// CPUがcounterモードの場合，playerOffencePoint分のダメージをplayerHP(php)が受ける
             System.out.println("CPUのカウンター！");
             System.out.println("Playerは" + this.playerOffencePoint + "ポイントのダメージ！");
-            this.playerHp = this.playerHp - this.playerOffencePoint;
+            this.php = this.php - this.playerOffencePoint;
           }
-        } else if (this.playerSpecialEffect.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，cpuのGuardPointを無視してcpuHpにダメージを与える
+        } else if (this.ps.contains("piercing")) {// PlayerがpiercingモードでCPUがcounterモードでない場合，cpuのGuardPointを無視してcpuHpにダメージを与える
           System.out.println("Playerの防御無視攻撃！");
-          if (this.cpuSpecialEffect.contains("counter")) {
+          if (this.cs.contains("counter")) {
             System.out.println("CPUのカウンター！");
             System.out.println("Playerは" + this.playerOffencePoint + "ポイントのダメージ！");
-            this.playerHp = this.playerHp - this.playerOffencePoint;
+            this.php = this.php - this.playerOffencePoint;
           } else {
             System.out.println("CPUは" + this.playerOffencePoint + "ポイントのダメージ！");
-            this.cpuHp = this.cpuHp - this.playerOffencePoint;
+            this.chp = this.chp - this.playerOffencePoint;
           }
         }
       }
     }
-    System.out.println("PlayerのHPは" + this.playerHp + "ポイント");
-    System.out.println("CPUのHPは" + this.cpuHp + "ポイント");
+    System.out.println("PlayerのHPは" + this.php + "ポイント");
+    System.out.println("CPUのHPは" + this.chp + "ポイント");
     System.out.println("------------Phase End--------------------------");
   }
 
   // PlayerとCPUのDeck(15枚)を作るメソッド
   public void createDeck() {
     int pcNum = 0;
-    int dino1 = rnd.nextInt(this.dinoName.length);
-    for (int i = 0; i < attackCard[dino1]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Attack:" + dinoName[dino1];
+    int dino1 = rnd.nextInt(this.dn.length);
+    for (int i = 0; i < atc[dino1]; i++, pcNum++) {
+      this.pd[pcNum] = "Attack:" + dn[dino1];
     }
-    for (int i = 0; i < agilityCard[dino1]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Agility:" + dinoName[dino1];
+    for (int i = 0; i < agc[dino1]; i++, pcNum++) {
+      this.pd[pcNum] = "Agility:" + dn[dino1];
     }
-    for (int i = 0; i < defenceCard[dino1]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Defence:" + dinoName[dino1];
-    }
-
-    int dino2 = rnd.nextInt(this.dinoName.length);
-    for (int i = 0; i < attackCard[dino2]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Attack:" + dinoName[dino2];
-    }
-    for (int i = 0; i < agilityCard[dino2]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Agility:" + dinoName[dino2];
-    }
-    for (int i = 0; i < defenceCard[dino2]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Defence:" + dinoName[dino2];
+    for (int i = 0; i < dc[dino1]; i++, pcNum++) {
+      this.pd[pcNum] = "Defence:" + dn[dino1];
     }
 
-    int dino3 = rnd.nextInt(this.dinoName.length);
-    for (int i = 0; i < attackCard[dino3]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Attack:" + dinoName[dino3];
+    int dino2 = rnd.nextInt(this.dn.length);
+    for (int i = 0; i < atc[dino2]; i++, pcNum++) {
+      this.pd[pcNum] = "Attack:" + dn[dino2];
     }
-    for (int i = 0; i < agilityCard[dino3]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Agility:" + dinoName[dino3];
+    for (int i = 0; i < agc[dino2]; i++, pcNum++) {
+      this.pd[pcNum] = "Agility:" + dn[dino2];
     }
-    for (int i = 0; i < defenceCard[dino3]; i++, pcNum++) {
-      this.playerDeck[pcNum] = "Defence:" + dinoName[dino3];
+    for (int i = 0; i < dc[dino2]; i++, pcNum++) {
+      this.pd[pcNum] = "Defence:" + dn[dino2];
+    }
+
+    int dino3 = rnd.nextInt(this.dn.length);
+    for (int i = 0; i < atc[dino3]; i++, pcNum++) {
+      this.pd[pcNum] = "Attack:" + dn[dino3];
+    }
+    for (int i = 0; i < agc[dino3]; i++, pcNum++) {
+      this.pd[pcNum] = "Agility:" + dn[dino3];
+    }
+    for (int i = 0; i < dc[dino3]; i++, pcNum++) {
+      this.pd[pcNum] = "Defence:" + dn[dino3];
     }
     System.out.println("Playerの恐竜召喚！");
-    System.out.println(this.dinoName[dino1]);
-    System.out.println(this.dinoName[dino2]);
-    System.out.println(this.dinoName[dino3]);
+    System.out.println(this.dn[dino1]);
+    System.out.println(this.dn[dino2]);
+    System.out.println(this.dn[dino3]);
 
     int cpuNum = 0;
-    dino1 = rnd.nextInt(this.dinoName.length);
-    for (int i = 0; i < attackCard[dino1]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Attack:" + dinoName[dino1];
+    dino1 = rnd.nextInt(this.dn.length);
+    for (int i = 0; i < atc[dino1]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Attack:" + dn[dino1];
     }
-    for (int i = 0; i < agilityCard[dino1]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Agility:" + dinoName[dino1];
+    for (int i = 0; i < agc[dino1]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Agility:" + dn[dino1];
     }
-    for (int i = 0; i < defenceCard[dino1]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Defence:" + dinoName[dino1];
-    }
-
-    dino2 = rnd.nextInt(this.dinoName.length);
-    for (int i = 0; i < attackCard[dino2]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Attack:" + dinoName[dino2];
-    }
-    for (int i = 0; i < agilityCard[dino2]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Agility:" + dinoName[dino2];
-    }
-    for (int i = 0; i < defenceCard[dino2]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Defence:" + dinoName[dino2];
+    for (int i = 0; i < dc[dino1]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Defence:" + dn[dino1];
     }
 
-    dino3 = rnd.nextInt(this.dinoName.length);
-    for (int i = 0; i < attackCard[dino3]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Attack:" + dinoName[dino3];
+    dino2 = rnd.nextInt(this.dn.length);
+    for (int i = 0; i < atc[dino2]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Attack:" + dn[dino2];
     }
-    for (int i = 0; i < agilityCard[dino3]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Agility:" + dinoName[dino3];
+    for (int i = 0; i < agc[dino2]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Agility:" + dn[dino2];
     }
-    for (int i = 0; i < defenceCard[dino3]; i++, cpuNum++) {
-      this.cpuDeck[cpuNum] = "Defence:" + dinoName[dino3];
+    for (int i = 0; i < dc[dino2]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Defence:" + dn[dino2];
+    }
+
+    dino3 = rnd.nextInt(this.dn.length);
+    for (int i = 0; i < atc[dino3]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Attack:" + dn[dino3];
+    }
+    for (int i = 0; i < agc[dino3]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Agility:" + dn[dino3];
+    }
+    for (int i = 0; i < dc[dino3]; i++, cpuNum++) {
+      this.cd[cpuNum] = "Defence:" + dn[dino3];
     }
     System.out.println("CPUの恐竜召喚！");
-    System.out.println(this.dinoName[dino1]);
-    System.out.println(this.dinoName[dino2]);
-    System.out.println(this.dinoName[dino3]);
+    System.out.println(this.dn[dino1]);
+    System.out.println(this.dn[dino2]);
+    System.out.println(this.dn[dino3]);
 
   }
 
   public void initLibrary() {
-    this.dinoName[0] = "ティラノ";
-    this.attackCard[0] = 3;
-    this.agilityCard[0] = 1;
-    this.defenceCard[0] = 1;
+    this.dn[0] = "ティラノ";
+    this.atc[0] = 3;
+    this.agc[0] = 1;
+    this.dc[0] = 1;
 
-    this.dinoName[1] = "ヴェロキラプトル";
-    this.attackCard[1] = 1;
-    this.agilityCard[1] = 3;
-    this.defenceCard[1] = 1;
+    this.dn[1] = "ヴェロキラプトル";
+    this.atc[1] = 1;
+    this.agc[1] = 3;
+    this.dc[1] = 1;
 
-    this.dinoName[2] = "トリケラトプス";
-    this.attackCard[2] = 1;
-    this.agilityCard[2] = 1;
-    this.defenceCard[2] = 3;
+    this.dn[2] = "トリケラトプス";
+    this.atc[2] = 1;
+    this.agc[2] = 1;
+    this.dc[2] = 3;
 
-    this.dinoName[3] = "プテラノドン";
-    this.attackCard[3] = 2;
-    this.agilityCard[3] = 2;
-    this.defenceCard[3] = 1;
+    this.dn[3] = "プテラノドン";
+    this.atc[3] = 2;
+    this.agc[3] = 2;
+    this.dc[3] = 1;
 
-    this.dinoName[4] = "ステゴサウルス";
-    this.attackCard[4] = 2;
-    this.agilityCard[4] = 1;
-    this.defenceCard[4] = 2;
+    this.dn[4] = "ステゴサウルス";
+    this.atc[4] = 2;
+    this.agc[4] = 1;
+    this.dc[4] = 2;
 
   }
 
   public String[] getDinoName() {
-    return dinoName;
+    return dn;
   }
 
   public void setDinoName(String[] dinoName) {
-    this.dinoName = dinoName;
+    this.dn = dinoName;
   }
 
   public int[] getAttackCard() {
-    return attackCard;
+    return atc;
   }
 
   public void setAttackCard(int[] attackCard) {
-    this.attackCard = attackCard;
+    this.atc = attackCard;
   }
 
   public int[] getAgilityCard() {
-    return agilityCard;
+    return agc;
   }
 
   public void setAgilityCard(int[] agilityCard) {
-    this.agilityCard = agilityCard;
+    this.agc = agilityCard;
   }
 
   public int[] getDefenceCard() {
-    return defenceCard;
+    return dc;
   }
 
   public void setDefenceCard(int[] defenceCard) {
-    this.defenceCard = defenceCard;
+    this.dc = defenceCard;
   }
 
   public String[] getPlayerDeck() {
-    return playerDeck;
+    return pd;
   }
 
   public void setPlayerDeck(String[] playerDeck) {
-    this.playerDeck = playerDeck;
+    this.pd = playerDeck;
   }
 
   public int[] getDrawnPlayerDeck() {
@@ -471,11 +475,11 @@ public class BattleDinosaurs {
   }
 
   public String[] getCpuDeck() {
-    return cpuDeck;
+    return cd;
   }
 
   public void setCpuDeck(String[] cpuDeck) {
-    this.cpuDeck = cpuDeck;
+    this.cd = cpuDeck;
   }
 
   public int[] getDrawnCpuDeck() {
@@ -487,19 +491,19 @@ public class BattleDinosaurs {
   }
 
   public int[] getPlayerCards() {
-    return playerCards;
+    return pcs;
   }
 
   public void setPlayerCards(int[] playerCards) {
-    this.playerCards = playerCards;
+    this.pcs = playerCards;
   }
 
   public int[] getCpuCards() {
-    return cpuCards;
+    return ccs;
   }
 
   public void setCpuCards(int[] cpuCards) {
-    this.cpuCards = cpuCards;
+    this.ccs = cpuCards;
   }
 
   public int getPlayerAttackPoint() {
@@ -583,35 +587,35 @@ public class BattleDinosaurs {
   }
 
   public int getPlayerHp() {
-    return playerHp;
+    return php;
   }
 
   public void setPlayerHp(int playerHp) {
-    this.playerHp = playerHp;
+    this.php = playerHp;
   }
 
   public int getCpuHp() {
-    return cpuHp;
+    return chp;
   }
 
   public void setCpuHp(int cpuHp) {
-    this.cpuHp = cpuHp;
+    this.chp = cpuHp;
   }
 
   public String getPlayerSpecialEffect() {
-    return playerSpecialEffect;
+    return ps;
   }
 
   public void setPlayerSpecialEffect(String playerSpecialEffect) {
-    this.playerSpecialEffect = playerSpecialEffect;
+    this.ps = playerSpecialEffect;
   }
 
   public String getCpuSpecialEffect() {
-    return cpuSpecialEffect;
+    return cs;
   }
 
   public void setCpuSpecialEffect(String cpuSpecialEffect) {
-    this.cpuSpecialEffect = cpuSpecialEffect;
+    this.cs = cpuSpecialEffect;
   }
 
   public int getDrawnNum() {
